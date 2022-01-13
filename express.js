@@ -11,6 +11,7 @@ const app = express();
 const fs = require("fs");
 const path = require("path");
 const port = 9999;
+
 app.use(express.json());
 
 const allUsers = require("./modules/allUsers.js");
@@ -44,7 +45,7 @@ app.post("/login", userStatusCheck, (req, res) => {
 
 app.get("/admin", (req, res) => {
   res.send(`You are the main admin and you have the rights to see allUsers for seeing
-      this you should type '/admin/allUsers' in routing part moreover, you can
+      this you should type '/admin/allUsers' in routing part with post method moreover, you can
       create subAdmin😍 for doing this just in Routing part type 'subAdmin' with
       post metod and in its body input subAdmin's name and id `);
 });
