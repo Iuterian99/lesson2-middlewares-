@@ -67,14 +67,21 @@ app.post("/subAdmin", (req, res) => {
 
   fs.readFile(
     path.resolve(__dirname, "./modules/subAdmins.js"),
-    (data, err) => {
+    (err, data) => {
       if (err) throw err;
-
-      console.log(data);
+      const newSubAdmin = data.push(user);
+      res.send(JSON.stringify(newSubAdmin, null, 4));
     }
   );
 
-  res.send("subAdmin page");
+  fs.writeFile(
+    path.resolve(__dirname, "./modules/subAdmins.js"),
+    (err, data) => {
+      if (err) throw err;
+
+      res.send(data);
+    }
+  );
 });
 
 app.listen(port, () => {
