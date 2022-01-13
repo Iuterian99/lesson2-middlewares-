@@ -1,22 +1,25 @@
-const express = require("express");
-const app = express();
-const fs = require("fs");
-const path = require("path");
-const port = 9999;
-app.use(express.json());
-//! app.use() to`liq application metodlari(Routelari) qabul qiluvchi middleware qabul qilish uchun ishlatiladi!
-
-const users = require("./modules/users.js");
 //! Middlewares
 /*
 "Middleware"lar routeimiz va controllerimiz"(req, res) => {})"orasida ishlab turuvchi funksiya 
 --> authorisation va authentication uchun, errorlani ushlab olish uchun, "api" larimizni bloklab qo`yish uchun ishatiladi va req, response abyectlariga ta`ssir ko`rsatish uchun ishlatiladi
 */
 
+//! app.use() to`liq application metodlari(Routelari) qabul qiluvchi middlewarelarni qabul qilish uchun ishlatiladi!
+
+const express = require("express");
+const app = express();
+const fs = require("fs");
+const path = require("path");
+const port = 9999;
+app.use(express.json());
+
+const allUsers = require("./modules/allUsers.js");
+const subAdmins = require("./modules/subAdmins.js");
+
 const userStatusCheck = (req, res, next) => {
   const { name, token } = req.body;
 
-  const foundUser = users.find((e) => e.name == name && e.token == token);
+  const foundUser = allUsers.find((e) => e.name == name && e.token == token);
   if (foundUser) {
     req.body.role = foundUser.role;
     next(); // next()--> allows the request to continue to the next middleware or function
@@ -41,16 +44,31 @@ app.post("/login", userStatusCheck, (req, res) => {
 
 app.get("/admin", (req, res) => {
   res.send(
+    "You are the main admin and you have the rights to see allUsers for seeing this you should type '/admin/allUsers' in routing part moreover, you can create subAdmin😍 for doing this just in Routing part type 'subAdmin' with post metod and in its body input subAdmin`s name & id"
+  );
+});
+
+app.get("/admin/:allUsers", (req, res) => {
+  res.send(
     "You are the main admin and you can create subAdmin😍 for doing this just in Routing part type 'subAdmin' with post metod and in its body input subAdmin`s name & id"
   );
 });
 
 app.get("/user", (req, res) => {
-  res.send("user page");
+  res.send(Allusers);
 });
 
-app.get("/subAdmin", (req, res) => {
+app.post("/subAdmin", (req, res) => {
   const { name, id } = req.body;
+
+  fs.readFile(
+    path.resolve(__dirname, "./modules/subAdmins.js"),
+    (data, err) => {
+      if (err) throw err;
+
+      console.log(data);
+    }
+  );
 
   res.send("subAdmin page");
 });
