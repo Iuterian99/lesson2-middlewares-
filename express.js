@@ -43,23 +43,27 @@ app.post("/login", userStatusCheck, (req, res) => {
 });
 
 app.get("/admin", (req, res) => {
-  res.send(
-    "You are the main admin and you have the rights to see allUsers for seeing this you should type '/admin/allUsers' in routing part moreover, you can create subAdmin😍 for doing this just in Routing part type 'subAdmin' with post metod and in its body input subAdmin`s name & id"
-  );
+  res.send(`You are the main admin and you have the rights to see allUsers for seeing
+      this you should type '/admin/allUsers' in routing part moreover, you can
+      create subAdmin😍 for doing this just in Routing part type 'subAdmin' with
+      post metod and in its body input subAdmin's name and id `);
 });
 
-app.get("/admin/:allUsers", (req, res) => {
-  res.send(
-    "You are the main admin and you can create subAdmin😍 for doing this just in Routing part type 'subAdmin' with post metod and in its body input subAdmin`s name & id"
-  );
+app.post("/admin/allUsers", userStatusCheck, (req, res) => {
+  const { role } = req.body;
+  if (role == "admin") {
+    res.send(allUsers);
+  } else {
+    res.send("You are not Admin🤷‍♂️");
+  }
 });
 
 app.get("/user", (req, res) => {
-  res.send(Allusers);
+  res.send("user page");
 });
 
 app.post("/subAdmin", (req, res) => {
-  const { name, id } = req.body;
+  const user = req.body;
 
   fs.readFile(
     path.resolve(__dirname, "./modules/subAdmins.js"),
