@@ -15,7 +15,6 @@ const port = 9999;
 app.use(express.json());
 
 const allUsers = require("./modules/allUsers.js");
-const subAdmins = require("./modules/subAdmins.js");
 
 const userStatusCheck = (req, res, next) => {
   const { name, token } = req.body;
@@ -69,18 +68,17 @@ app.post("/subAdmin", (req, res) => {
   fs.readFile(
     path.resolve(__dirname, "./modules/subAdmins.js"),
     (err, data) => {
-      if (err) throw err;
-      const newSubAdmin = data.push(user);
-      res.send(JSON.stringify(newSubAdmin, null, 4));
-    }
-  );
+      if (err) throw err
+      // const users = JSON.parse(data)
+      console.log(data.toString())
+      // users.push(user);
 
-  fs.writeFile(
-    path.resolve(__dirname, "./modules/subAdmins.js"),
-    (err, data) => {
-      if (err) throw err;
-
-      res.send(data);
+      // fs.writeFile(path.resolve(__dirname, "./modules/subAdmins.js"), 
+      // JSON.stringify(users, null, 4), (err) => {
+      //   if (err) throw err;
+      //   res.send('OK');
+      // });
+      res.send("ok")
     }
   );
 });
